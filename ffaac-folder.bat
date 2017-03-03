@@ -3,7 +3,10 @@ REM Inicjalizacja zmiennej liczby plyt
 set /a cdcounter=0
 
 SET RESULT=---
-set OPTIONS=-vn -c:a libfdk_aac -vbr 5
+SET OPTIONS=-ac 2 -ar 44100 -vn -c:a libfdk_aac -vbr 5 -cutoff 20000
+REM przy ustawionym bitrate na 320k libfdk_aac obcina pasmo do 17khz!!!
+REM SET OPTIONS=-ac 2 -ar 44100 -vn -c:a libfdk_aac -b:a 320k
+SET FORMATS=*.flac *.mpc *.wav *.mp3 *.m4a *.aac
 
 REM Wejscie w tryb
 setlocal ENABLEDELAYEDEXPANSION
@@ -39,7 +42,7 @@ FOR /D %%c IN ("CD*") DO (
 GOTO END
 
 :SINGLECD
-for %%a in (*.flac *.mpc *.wav) do (
+for %%a in (%FORMATS%) do (
 	ffmpeg-aac -i "%%a" %OPTIONS% "%cel%\%%~na.m4a"
 )
 
